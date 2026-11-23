@@ -19,7 +19,7 @@ app.setAppUserModelId(APP_ID);
 
 // ------------------------------------------------------------------ auto start
 function applyAutoStart() {
-  if (!app.isPackaged) return; // don't register electron.exe while developing
+  if (!app.isPackaged) return; // register electron.exe while developing
   app.setLoginItemSettings({
     openAtLogin: !!store.get().autoStart,
     path: process.execPath,
