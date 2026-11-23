@@ -1,0 +1,55 @@
+{
+  "name": "hydration-buddy",
+  "productName": "Hydration Buddy",
+  "version": "1.0.0",
+  "description": "A friendly hydration reminder with walking avatars",
+  "main": "src/main.js",
+  "author": "Hydration Buddy",
+  "license": "MIT",
+  "scripts": {
+    "generate": "node scripts/generate-assets.js",
+    "start": "electron .",
+    "dist": "npm run generate && electron-builder --win",
+    "smoke": "electron scripts/smoke-main.js"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.hydrationbuddy.app",
+    "productName": "Hydration Buddy",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Hydration Buddy",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "include": "build/installer.nsh"
+    }
+  }
+}

@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'">
+<title>Hydration Buddy – Settings</title>
+<link rel="stylesheet" href="settings.css">
+</head>
+<body>
+<header>
+  <img src="../assets/generated/icon.png" alt="" class="logo">
+  <div class="title">
+    <h1>Hydration Buddy</h1>
+    <p id="status">Loading…</p>
+  </div>
+  <div class="today"><span id="today">0</span><small>glasses today</small></div>
+  <button id="preview" class="primary">▶ Preview reminder</button>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Reminders</h2>
+    <label class="row switch"><span>Enable reminders</span><input type="checkbox" id="enabled"><i></i></label>
+    <div class="row">
+      <span>Remind me every</span>
+      <div class="interval">
+        <input type="number" id="interval" min="1" max="480" step="1"><span>minutes</span>
+      </div>
+    </div>
+    <div class="chips" id="intervalChips">
+      <button data-v="15">15m</button><button data-v="20">20m</button><button data-v="30">30m</button>
+      <button data-v="45">45m</button><button data-v="60">1h</button><button data-v="90">1.5h</button><button data-v="120">2h</button>
+    </div>
+    <label class="row switch"><span>Quiet hours (no reminders)</span><input type="checkbox" id="quiet"><i></i></label>
+    <div class="row sub" id="quietRow">
+      <span>From</span><input type="time" id="quietStart"><span>to</span><input type="time" id="quietEnd">
+    </div>
+    <label class="row switch"><span>Launch automatically when Windows starts</span><input type="checkbox" id="autoStart"><i></i></label>
+    <p class="hint" id="devHint" hidden>Auto-start is registered only in the installed app (not in development mode).</p>
+  </section>
+
+  <section class="card">
+    <h2>Avatars</h2>
+    <div class="row">
+      <span>Which avatar visits you</span>
+      <select id="avatarMode">
+        <option value="random">Surprise me (different each time)</option>
+        <option value="sequence">Take turns in order</option>
+        <option value="fixed">Always the same one</option>
+      </select>
+    </div>
+    <p class="hint" id="avatarHint"></p>
+    <div class="avatars" id="avatars"></div>
+    <div class="row">
+      <span>Avatar size</span>
+      <div class="seg" id="size">
+        <button data-v="small">Small</button><button data-v="medium">Medium</button><button data-v="large">Large</button>
+      </div>
+    </div>
+    <div class="row">
+      <span>Steps she walks in</span>
+      <div class="interval"><input type="range" id="steps" min="2" max="12"><b id="stepsVal">5</b></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Messages</h2>
+    <div class="row">
+      <span>Message style</span>
+      <select id="messageMode">
+        <option value="random">Random (never the same twice in a row)</option>
+        <option value="sequence">One after another</option>
+        <option value="fixed">Always the same message</option>
+      </select>
+    </div>
+    <div class="row sub" id="fixedMsgRow"><select id="fixedMessage" class="wide"></select></div>
+    <label class="row switch"><span>Include built-in messages (<span id="defCount">0</span>)</span><input type="checkbox" id="useDefaults"><i></i></label>
+    <div class="addmsg">
+      <input type="text" id="newMsg" maxlength="160" placeholder="Write your own message, e.g. “Drink up, superstar! ⭐”">
+      <button id="addMsg" class="primary small">Add</button>
+    </div>
+    <ul class="msglist" id="customList"></ul>
+    <details>
+      <summary>Show built-in messages</summary>
+      <ul class="msglist muted" id="defaultList"></ul>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Behaviour</h2>
+    <div class="row">
+      <span>Hide the reminder automatically after</span>
+      <select id="autoDismiss">
+        <option value="0">Never – wait for me</option><option value="15">15 seconds</option><option value="30">30 seconds</option>
+        <option value="45">45 seconds</option><option value="60">1 minute</option><option value="120">2 minutes</option>
+      </select>
+    </div>
+    <div class="row">
+      <span>Snooze length</span>
+      <select id="snooze">
+        <option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option>
+      </select>
+    </div>
+    <label class="row switch"><span>Play a soft “bloop” sound</span><input type="checkbox" id="sound"><i></i></label>
+  </section>
+</main>
+<div id="toast" class="toast">Saved ✓</div>
+<script src="settings.js"></script>
+</body>
+</html>
