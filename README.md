@@ -65,7 +65,7 @@ characters walks in from the edge of your screen, waves, and shows a friendly me
 
 ## 📥 Install
 
-1. Download **`Hydration Buddy Setup 1.3.0.exe`** from the [releases folder](https://github.com/Sabariks092/hyderation-buddy/raw/main/releases/Hydration%20Buddy%20Setup%201.3.0.exe).
+1. **`Hydration Buddy Setup 1.3.0.exe`** - [Download Hyderation Buddy](https://github.com/Sabariks092/hyderation-buddy/raw/main/releases/Hydration%20Buddy%20Setup%201.3.0.exe).
 2. Run the installer and follow the steps.
 3. Your buddy greets you a few seconds after the first launch. After that, look for the 💧 icon in the system tray.
 
