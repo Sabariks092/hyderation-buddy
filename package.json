@@ -13,7 +13,8 @@
     "smoke": "electron scripts/smoke-main.js",
     "test:click": "electron scripts/smoke-clicks.js",
     "sprites": "node scripts/to-avif.js",
-    "check:sprites": "electron scripts/check-sprites.js"
+    "check:sprites": "electron scripts/check-sprites.js",
+    "icons": "node scripts/make-icons.js"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
@@ -31,6 +32,7 @@
     },
     "files": [
       "src/**/*",
+      "!src/assets/Water Timer Notification Icon.png",
       "!src/assets/main-reference{,/**}",
       "!src/assets/generated/*/{walkLeft,walkRight,stopLeftA,stopLeftB,turnFront,turnRight,startRight,wave,idle}.png",
       "package.json"

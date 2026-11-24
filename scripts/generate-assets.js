@@ -20,6 +20,7 @@ const { buildHead } = require('./rig/head');
 const { drawCharacter, defs } = require('./rig/body');
 const { buildSequences, FPS } = require('./rig/motion');
 const { edt, encodeSmallPNG } = require('./rig/image');
+const { makeIcons } = require('./make-icons');
 
 const ROOT = path.join(__dirname, '..');
 const OUTS = [path.join(ROOT, 'src', 'assets', 'generated'), path.join(ROOT, 'assets', 'generated')];
@@ -28,7 +29,6 @@ const SCALE = 0.457;              // reference pixels -> sprite pixels
 const SS = 2;                     // supersampling
 const BORDER = 3.6;               // white sticker border (sprite pixels)
 
-const svgPng = (svg) => new Resvg(svg, { font: { loadSystemFonts: false } }).render().asPng();
 // write to a temp file and swap it in: image viewers / editors may keep the old file mapped
 function writeSafe(file, buf) {
   const tmp = `${file}.${process.pid}.tmp`;
@@ -97,36 +97,7 @@ function generateAvatar(av) {
   writeAll(`${av.id}/portrait.png`, encodeSmallPNG(256, 256, renderSprite(drawCharacter(still, av, hd, 'pt'), av, 256, 256, [-size / 2, (bun ? 105 : 140) - 805, size, size])));
 }
 
-// ---------------------------------------------------------------- icons
-function iconSvg(size) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 100 100">
-  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fd3ff"/><stop offset="1" stop-color="#1f8ee0"/></linearGradient></defs>
-  <path d="M50 6 C50 6 18 44 18 64 A32 32 0 0 0 82 64 C82 44 50 6 50 6Z" fill="url(#g)" stroke="#155f9c" stroke-width="4" stroke-linejoin="round"/>
-  <ellipse cx="35" cy="52" rx="6" ry="11" fill="#fff" opacity="0.55" transform="rotate(25 35 52)"/>
-  <circle cx="40" cy="66" r="4.2" fill="#143a5c"/><circle cx="60" cy="66" r="4.2" fill="#143a5c"/>
-  <circle cx="41.4" cy="64.6" r="1.4" fill="#fff"/><circle cx="61.4" cy="64.6" r="1.4" fill="#fff"/>
-  <path d="M44 75 Q50 80 56 75" fill="none" stroke="#143a5c" stroke-width="3" stroke-linecap="round"/>
-  <ellipse cx="33" cy="73" rx="4.5" ry="2.6" fill="#ff9fb0" opacity="0.7"/><ellipse cx="67" cy="73" rx="4.5" ry="2.6" fill="#ff9fb0" opacity="0.7"/>
-</svg>`;
-}
-// ICO container with embedded PNG images
-function makeIco(pngs) {
-  const header = Buffer.alloc(6);
-  header.writeUInt16LE(0, 0); header.writeUInt16LE(1, 2); header.writeUInt16LE(pngs.length, 4);
-  const dir = Buffer.alloc(16 * pngs.length);
-  let offset = 6 + dir.length;
-  pngs.forEach(({ size, buf }, i) => {
-    const o = i * 16;
-    dir.writeUInt8(size >= 256 ? 0 : size, o); dir.writeUInt8(size >= 256 ? 0 : size, o + 1);
-    dir.writeUInt8(0, o + 2); dir.writeUInt8(0, o + 3);
-    dir.writeUInt16LE(1, o + 4); dir.writeUInt16LE(32, o + 6);
-    dir.writeUInt32LE(buf.length, o + 8); dir.writeUInt32LE(offset, o + 12);
-    offset += buf.length;
-  });
-  return Buffer.concat([header, dir, ...pngs.map((p) => p.buf)]);
-}
-
-function writeShared() {
+async function writeShared() {
   const seqs = buildSequences();
   const manifest = {
     version: 1, fps: FPS, frameW: FW, frameH: FH, cols: COLS, scale: 1.2, anchorX: ANCHOR_X, groundY: GROUND_Y,
@@ -140,13 +111,8 @@ function writeShared() {
     };
   }
   writeAll('manifest.json', JSON.stringify(manifest, null, 2));
-  const build = path.join(ROOT, 'build');
-  fs.mkdirSync(build, { recursive: true });
-  fs.writeFileSync(path.join(build, 'icon.png'), svgPng(iconSvg(512)));
-  fs.writeFileSync(path.join(build, 'icon.ico'), makeIco([16, 24, 32, 48, 64, 128, 256].map((size) => ({ size, buf: svgPng(iconSvg(size)) }))));
-  writeAll('tray.png', svgPng(iconSvg(32)));
-  writeAll('tray@2x.png', svgPng(iconSvg(64)));
-  writeAll('icon.png', svgPng(iconSvg(256)));
+  // logo / tray / installer icons come from src/assets/Water Timer Notification Icon.png
+  await makeIcons();
 }
 
 async function main() {
@@ -156,7 +122,7 @@ async function main() {
   await Promise.all(list.map((av) => new Promise((res, rej) => {
     fork(__filename, ['--worker', av.id]).on('exit', (code) => (code ? rej(new Error(`${av.id} failed`)) : res()));
   })));
-  writeShared();
+  await writeShared();
   console.log('done ->', OUTS.join(', '));
 }
 main().catch((e) => { console.error(e); process.exit(1); });

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hydration Buddy – a friendly reminder to drink water</title>
+<meta name="description" content="A friendly little character walks onto your screen and reminds you to drink water. Free for Windows 10 and 11.">
+<link rel="icon" href="src/assets/generated/icon.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { ink: '#19324a', muted: '#5f778c', line: '#dbe7f1', sky: '#f3f8fc', accent: '#1f8ee0', accent2: '#4cb6f5', deep: '#156ab0' },
+        fontFamily: { display: ['Fredoka', 'Segoe UI', 'system-ui', 'sans-serif'], body: ['Nunito', 'Segoe UI', 'system-ui', 'sans-serif'] },
+        boxShadow: { card: '0 1px 2px rgba(20,60,100,.05), 0 12px 32px -12px rgba(20,60,100,.18)', btn: '0 4px 0 #156ab0' },
+      },
+    },
+  };
+</script>
+<style>
+  @font-face { font-family: Fredoka; src: url(src/assets/fonts/fredoka.woff2) format('woff2'); font-weight: 300 700; font-display: swap; }
+  @font-face { font-family: Nunito; src: url(src/assets/fonts/nunito.woff2) format('woff2'); font-weight: 200 1000; font-display: swap; }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .bob { animation: bob 3.2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .bob { animation: none; } html { scroll-behavior: auto; } }
+</style>
+</head>
+<body class="bg-sky text-ink font-body antialiased">
+
+<!-- nav -->
+<header class="sticky top-0 z-20 border-b border-line bg-white/80 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center gap-3 px-5 py-3">
+    <a href="#top" class="flex items-center gap-2.5">
+      <img src="src/assets/generated/icon.png" alt="" class="h-9 w-9">
+      <span class="font-display text-xl font-semibold">Hydration Buddy</span>
+    </a>
+    <nav class="ml-auto hidden items-center gap-6 text-sm font-bold text-muted md:flex">
+      <a href="#features" class="hover:text-accent">Features</a>
+      <a href="#screenshots" class="hover:text-accent">Screenshots</a>
+      <a href="#buddies" class="hover:text-accent">Buddies</a>
+      <a href="#install" class="hover:text-accent">Install</a>
+      <a href="#build" class="hover:text-accent">Build</a>
+    </nav>
+    <a href="releases/Hydration%20Buddy%20Setup%201.3.0.exe" download
+       class="ml-auto rounded-xl bg-gradient-to-b from-accent2 to-accent px-4 py-2 text-sm font-extrabold text-white shadow-btn transition active:translate-y-0.5 active:shadow-none md:ml-0">
+      Download
+    </a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- hero -->
+<section class="relative overflow-hidden bg-gradient-to-b from-[#e3f3ff] via-[#f0f9ff] to-sky">
+  <div class="mx-auto max-w-6xl px-5 pb-6 pt-16 text-center sm:pt-20">
+    <div class="mb-5 flex flex-wrap justify-center gap-2 text-xs font-extrabold">
+      <span class="rounded-full border border-line bg-white px-3 py-1 text-accent">v1.3.0</span>
+      <span class="rounded-full border border-line bg-white px-3 py-1 text-muted">Windows 10 | 11</span>
+      <span class="rounded-full border border-line bg-white px-3 py-1 text-muted">Electron 33</span>
+      <span class="rounded-full border border-line bg-white px-3 py-1 text-muted">MIT License</span>
+    </div>
+    <h1 class="mx-auto max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-6xl">
+      A friendly reminder to <span class="text-accent">drink water</span> 💧
+    </h1>
+    <p class="mx-auto mt-5 max-w-2xl text-lg text-muted sm:text-xl">
+      A friendly little character walks onto your screen and reminds you to drink water.
+    </p>
+    <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a href="releases/Hydration%20Buddy%20Setup%201.3.0.exe" download
+         class="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-b from-accent2 to-accent px-8 py-4 text-lg font-extrabold text-white shadow-btn transition hover:brightness-105 active:translate-y-1 active:shadow-none">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 20h16"/></svg>
+        Download for Windows
+      </a>
+      <a href="https://github.com/Sabariks092/hyderation-buddy"
+         class="inline-flex items-center gap-2 rounded-2xl border-2 border-line bg-white px-7 py-3.5 text-lg font-extrabold text-ink transition hover:border-accent hover:text-accent">
+        View on GitHub
+      </a>
+    </div>
+    <p class="mt-3 text-sm text-muted">Hydration Buddy Setup 1.3.0.exe · 74 MB · free, no account needed</p>
+
+    <div class="mt-12 flex items-end justify-center gap-1 sm:gap-6">
+      <img src="src/assets/generated/lavender/preview.png" alt="Lavender" class="bob w-1/5 max-w-[170px]">
+      <img src="src/assets/generated/mint/preview.png" alt="Mint" class="bob w-1/5 max-w-[170px]" style="animation-delay:-.6s">
+      <img src="src/assets/generated/pearl/preview.png" alt="Pearl" class="bob w-1/5 max-w-[170px]" style="animation-delay:-1.2s">
+      <img src="src/assets/generated/ruby/preview.png" alt="Ruby" class="bob w-1/5 max-w-[170px]" style="animation-delay:-1.8s">
+      <img src="src/assets/generated/scarlet/preview.png" alt="Scarlet" class="bob w-1/5 max-w-[170px]" style="animation-delay:-2.4s">
+    </div>
+  </div>
+</section>
+
+<!-- what it does -->
+<section class="mx-auto max-w-6xl px-5 py-16">
+  <div class="grid items-center gap-10 md:grid-cols-2">
+    <div>
+      <p class="text-sm font-extrabold uppercase tracking-widest text-accent">What it does</p>
+      <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">Your buddy walks in, waves, and walks away</h2>
+      <p class="mt-4 text-lg leading-relaxed text-muted">
+        Hydration Buddy lives quietly in your system tray. When it is time for water, one of five animated
+        characters walks in from the edge of your screen, waves, and shows a friendly message. Click
+        <b class="text-ink">I drank it</b>, snooze, or dismiss, and they walk away again.
+      </p>
+    </div>
+    <div class="flex justify-center rounded-3xl border border-line bg-gradient-to-br from-[#e3f3ff] to-white p-8 shadow-card">
+      <img src="docs/reminder.png" alt="A reminder bubble saying hello and asking you to drink water" class="w-full max-w-[400px]">
+    </div>
+  </div>
+</section>
+
+<!-- features -->
+<section id="features" class="scroll-mt-20 border-y border-line bg-white">
+  <div class="mx-auto max-w-6xl px-5 py-16">
+    <div class="text-center">
+      <p class="text-sm font-extrabold uppercase tracking-widest text-accent">Features</p>
+      <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">Everything you need to stay hydrated</h2>
+    </div>
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <article class="rounded-2xl border border-line bg-sky p-6 transition hover:-translate-y-1 hover:shadow-card">
+        <div class="text-3xl">🚶‍♀️</div>
+        <h3 class="mt-3 font-display text-xl font-semibold">Walking avatars</h3>
+        <p class="mt-1.5 text-muted">Five hand-drawn characters with smooth walk, turn, wave and idle animations.</p>
+      </article>
+      <article class="rounded-2xl border border-line bg-sky p-6 transition hover:-translate-y-1 hover:shadow-card">
+        <div class="text-3xl">📊</div>
+        <h3 class="mt-3 font-display text-xl font-semibold">Hydration dashboard</h3>
+        <p class="mt-1.5 text-muted">A 7-day chart of your glasses per day, today's total, weekly total and daily average.</p>
+      </article>
+      <article class="rounded-2xl border border-line bg-sky p-6 transition hover:-translate-y-1 hover:shadow-card">
+        <div class="text-3xl">⏰</div>
+        <h3 class="mt-3 font-display text-xl font-semibold">Flexible schedule</h3>
+        <p class="mt-1.5 text-muted">Remind every 1 to 480 minutes, with one-click presets from 15 minutes to 2 hours.</p>
+      </article>
+      <article class="rounded-2xl border border-line bg-sky p-6 transition hover:-translate-y-1 hover:shadow-card">
+        <div class="text-3xl">🌙</div>
+        <h3 class="mt-3 font-display text-xl font-semibold">Quiet hours</h3>
+        <p class="mt-1.5 text-muted">No reminders during the hours you choose, or while your PC is locked.</p>
+      </article>
+      <article class="rounded-2xl border border-line bg-sky p-6 transition hover:-translate-y-1 hover:shadow-card">
+        <div class="text-3xl">💬</div>
+        <h3 class="mt-3 font-display text-xl font-semibold">Your own messages</h3>
+        <p class="mt-1.5 text-muted">30 built-in messages plus any you write yourself, with <code class="rounded bg-white px-1.5 py-0.5 text-sm text-ink">{name}</code> for your name.</p>
+      </article>
+      <article class="rounded-2xl border border-line bg-sky p-6 transition hover:-translate-y-1 hover:shadow-card">
+        <div class="text-3xl">🎭</div>
+        <h3 class="mt-3 font-display text-xl font-semibold">Pick your buddy</h3>
+        <p class="mt-1.5 text-muted">A surprise each time, take turns in order, or always the same character.</p>
+      </article>
+      <article class="rounded-2xl border border-line bg-sky p-6 transition hover:-translate-y-1 hover:shadow-card">
+        <div class="text-3xl">😴</div>
+        <h3 class="mt-3 font-display text-xl font-semibold">Snooze and pause</h3>
+        <p class="mt-1.5 text-muted">Snooze a reminder for a few minutes or pause everything for an hour from the tray.</p>
+      </article>
+      <article class="rounded-2xl border border-line bg-sky p-6 transition hover:-translate-y-1 hover:shadow-card">
+        <div class="text-3xl">🚀</div>
+        <h3 class="mt-3 font-display text-xl font-semibold">Starts with Windows</h3>
+        <p class="mt-1.5 text-muted">Launches silently in the tray and begins reminding straight away.</p>
+      </article>
+      <article class="rounded-2xl border border-line bg-sky p-6 transition hover:-translate-y-1 hover:shadow-card">
+        <div class="text-3xl">🔒</div>
+        <h3 class="mt-3 font-display text-xl font-semibold">Private</h3>
+        <p class="mt-1.5 text-muted">Everything stays on your PC. No account, no internet connection, no tracking.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- screenshots -->
+<section id="screenshots" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16">
+  <div class="text-center">
+    <p class="text-sm font-extrabold uppercase tracking-widest text-accent">Screenshots</p>
+    <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">See it in action</h2>
+  </div>
+  <div class="mt-10 grid gap-8 lg:grid-cols-2">
+    <figure>
+      <div class="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
+        <div class="flex items-center gap-1.5 border-b border-line bg-sky px-4 py-2.5">
+          <i class="h-2.5 w-2.5 rounded-full bg-[#ff9fb0]"></i><i class="h-2.5 w-2.5 rounded-full bg-[#ffd27f]"></i><i class="h-2.5 w-2.5 rounded-full bg-[#8fdcae]"></i>
+        </div>
+        <img src="docs/dashboard.png" alt="Settings window with the hydration dashboard: a bar chart of glasses per day, today's total and a reset button" class="w-full">
+      </div>
+      <figcaption class="mt-3 text-center font-bold">Dashboard: your week at a glance</figcaption>
+    </figure>
+    <figure>
+      <div class="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
+        <div class="flex items-center gap-1.5 border-b border-line bg-sky px-4 py-2.5">
+          <i class="h-2.5 w-2.5 rounded-full bg-[#ff9fb0]"></i><i class="h-2.5 w-2.5 rounded-full bg-[#ffd27f]"></i><i class="h-2.5 w-2.5 rounded-full bg-[#8fdcae]"></i>
+        </div>
+        <img src="docs/avatars.png" alt="Avatar picker showing Lavender, Mint, Pearl, Ruby and Scarlet" class="w-full">
+      </div>
+      <figcaption class="mt-3 text-center font-bold">Choose who visits you</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- buddies -->
+<section id="buddies" class="scroll-mt-20 border-y border-line bg-white">
+  <div class="mx-auto max-w-6xl px-5 py-16">
+    <div class="text-center">
+      <p class="text-sm font-extrabold uppercase tracking-widest text-accent">Meet the buddies</p>
+      <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">Five friends, one mission</h2>
+    </div>
+    <div class="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
+      <div class="rounded-2xl border-2 border-[#e2d3f5] bg-[#f2e9fc] p-5 text-center">
+        <img src="src/assets/generated/lavender/portrait.png" alt="" class="mx-auto h-24 w-24">
+        <h3 class="mt-3 font-display text-xl font-semibold text-[#6b3fa0]">Lavender</h3>
+        <p class="mt-1 text-sm text-muted">Wavy hair, lilac smocked top</p>
+      </div>
+      <div class="rounded-2xl border-2 border-[#c6ebd5] bg-[#e3f6ea] p-5 text-center">
+        <img src="src/assets/generated/mint/portrait.png" alt="" class="mx-auto h-24 w-24">
+        <h3 class="mt-3 font-display text-xl font-semibold text-[#237050]">Mint</h3>
+        <p class="mt-1 text-sm text-muted">Sleek side braid, pearl earrings and mint shirt</p>
+      </div>
+      <div class="rounded-2xl border-2 border-[#f6e1b5] bg-[#fdf2dc] p-5 text-center">
+        <img src="src/assets/generated/pearl/portrait.png" alt="" class="mx-auto h-24 w-24">
+        <h3 class="mt-3 font-display text-xl font-semibold text-[#8a5a12]">Pearl</h3>
+        <p class="mt-1 text-sm text-muted">Curly bun, gold specs and floral kurta</p>
+      </div>
+      <div class="rounded-2xl border-2 border-[#f8cdd2] bg-[#fde8ea] p-5 text-center">
+        <img src="src/assets/generated/ruby/portrait.png" alt="" class="mx-auto h-24 w-24">
+        <h3 class="mt-3 font-display text-xl font-semibold text-[#a8283f]">Ruby</h3>
+        <p class="mt-1 text-sm text-muted">Curly hair, round glasses, floral dress</p>
+      </div>
+      <div class="col-span-2 rounded-2xl border-2 border-[#f8d1ca] bg-[#fdeae6] p-5 text-center sm:col-span-1">
+        <img src="src/assets/generated/scarlet/portrait.png" alt="" class="mx-auto h-24 w-24">
+        <h3 class="mt-3 font-display text-xl font-semibold text-[#b3332e]">Scarlet</h3>
+        <p class="mt-1 text-sm text-muted">Twin braids, red kurta and ID lanyard</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- install + using -->
+<section id="install" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16">
+  <div class="grid gap-8 lg:grid-cols-2">
+    <div class="rounded-3xl border border-line bg-white p-8 shadow-card">
+      <p class="text-sm font-extrabold uppercase tracking-widest text-accent">Install</p>
+      <h2 class="mt-2 font-display text-3xl font-semibold">Up and running in a minute</h2>
+      <ol class="mt-6 space-y-5">
+        <li class="flex gap-4">
+          <span class="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-accent font-display text-lg font-semibold text-white">1</span>
+          <p class="pt-1">Download <b>Hydration Buddy Setup 1.3.0.exe</b> with the button below.</p>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-accent font-display text-lg font-semibold text-white">2</span>
+          <p class="pt-1">Run the installer and follow the steps.</p>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-accent font-display text-lg font-semibold text-white">3</span>
+          <p class="pt-1">Your buddy greets you a few seconds after the first launch. After that, look for the Hydration Buddy icon in the system tray.</p>
+        </li>
+      </ol>
+      <a href="releases/Hydration%20Buddy%20Setup%201.3.0.exe" download
+         class="mt-7 inline-flex items-center gap-3 rounded-2xl bg-gradient-to-b from-accent2 to-accent px-7 py-3.5 font-extrabold text-white shadow-btn transition hover:brightness-105 active:translate-y-1 active:shadow-none">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 20h16"/></svg>
+        Download v1.3.0
+      </a>
+      <div class="mt-6 rounded-xl border border-[#f6e1b5] bg-[#fdf6e6] p-4 text-sm text-[#6b4a12]">
+        <b>Windows SmartScreen:</b> the installer is not code-signed, so Windows may show a “Windows protected your PC”
+        notice. Choose <b>More info → Run anyway</b>.
+      </div>
+    </div>
+
+    <div class="rounded-3xl border border-line bg-white p-8 shadow-card">
+      <p class="text-sm font-extrabold uppercase tracking-widest text-accent">Using it</p>
+      <h2 class="mt-2 font-display text-3xl font-semibold">Simple by design</h2>
+      <dl class="mt-6 space-y-5">
+        <div>
+          <dt class="font-extrabold">Tray icon, left click</dt>
+          <dd class="text-muted">Open settings and the dashboard.</dd>
+        </div>
+        <div>
+          <dt class="font-extrabold">Tray icon, right click</dt>
+          <dd class="text-muted">Remind me now, log a glass, pause for an hour, turn reminders on or off, quit.</dd>
+        </div>
+        <div>
+          <dt class="font-extrabold">Reminder bubble</dt>
+          <dd class="text-muted"><i>I drank it</i> adds a glass to today's count, <i>Snooze</i> brings your buddy back later, <i>✕</i> dismisses.</dd>
+        </div>
+        <div>
+          <dt class="font-extrabold">Dashboard</dt>
+          <dd class="text-muted">The <i>Reset</i> button sets today's count back to zero. Earlier days are kept.</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- build from source -->
+<section id="build" class="scroll-mt-20 border-t border-line bg-white">
+  <div class="mx-auto max-w-6xl px-5 py-16">
+    <p class="text-sm font-extrabold uppercase tracking-widest text-accent">For developers</p>
+    <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">Build from source</h2>
+    <p class="mt-3 text-muted">Requires <a href="https://nodejs.org" class="font-bold text-accent hover:underline">Node.js</a> 18 or newer on Windows.</p>
+
+    <div class="mt-8 grid gap-8 lg:grid-cols-2">
+      <div>
+        <pre class="overflow-x-auto rounded-2xl bg-ink p-6 text-sm leading-relaxed text-[#d7e9f7]"><code>git clone https://github.com/Sabariks092/hyderation-buddy.git
+cd hyderation-buddy
+npm install
+
+npm start          <span class="text-[#7fa3bf]"># run the app in development</span>
+npm run dist       <span class="text-[#7fa3bf]"># regenerate the artwork and build the installer into dist/</span></code></pre>
+
+        <div class="mt-6 overflow-hidden rounded-2xl border border-line">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-sky text-xs uppercase tracking-wider text-muted">
+              <tr><th class="px-4 py-3">Command</th><th class="px-4 py-3">What it does</th></tr>
+            </thead>
+            <tbody class="divide-y divide-line">
+              <tr><td class="whitespace-nowrap px-4 py-3 font-mono text-[13px] text-accent">npm start</td><td class="px-4 py-3 text-muted">Runs the app with Electron</td></tr>
+              <tr><td class="whitespace-nowrap px-4 py-3 font-mono text-[13px] text-accent">npm run generate</td><td class="px-4 py-3 text-muted">Renders every sprite sheet and icon, then packs the sprites</td></tr>
+              <tr><td class="whitespace-nowrap px-4 py-3 font-mono text-[13px] text-accent">npm run sprites</td><td class="px-4 py-3 text-muted">Only re-packs the existing sprite sheets into animated AVIF</td></tr>
+              <tr><td class="whitespace-nowrap px-4 py-3 font-mono text-[13px] text-accent">npm run check:sprites</td><td class="px-4 py-3 text-muted">Compares the packed sprites with their PNG sources</td></tr>
+              <tr><td class="whitespace-nowrap px-4 py-3 font-mono text-[13px] text-accent">npm run dist</td><td class="px-4 py-3 text-muted">Builds <span class="font-mono text-[13px]">dist/Hydration Buddy Setup &lt;version&gt;.exe</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-display text-xl font-semibold">Project layout</h3>
+        <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-sky p-6 text-[13px] leading-relaxed text-ink"><code>src/
+  main.js          main process: scheduling, tray, windows
+  store.js         settings and drinking history
+                   (JSON in the user's app-data folder)
+  sprites.js       unpacks the animated AVIF sprites
+  overlay/         the transparent window the avatar walks in
+  bubble/          the clickable message bubble
+  settings/        settings window and dashboard
+  assets/generated generated artwork
+scripts/
+  generate-assets.js   renders the characters and animations
+  to-avif.js           packs sprite sheets into animated AVIF</code></pre>
+
+        <h3 class="mt-8 font-display text-xl font-semibold">How the installer stays small</h3>
+        <p class="mt-2 text-muted">
+          The animations are 273 frames per character. Stored as PNG sprite sheets they take 62 MB. Packed as
+          animated AVIF, where each frame is compressed against the one before it, they take about 5 MB, and
+          the app unpacks them back into sprite sheets in a fraction of a second when a reminder starts.
+        </p>
+        <div class="mt-5 grid grid-cols-3 gap-3 text-center">
+          <div class="rounded-xl border border-line bg-sky p-4"><b class="block font-display text-2xl text-accent">273</b><span class="text-xs text-muted">frames per character</span></div>
+          <div class="rounded-xl border border-line bg-sky p-4"><b class="block font-display text-2xl text-accent">62 → 5 MB</b><span class="text-xs text-muted">sprite size</span></div>
+          <div class="rounded-xl border border-line bg-sky p-4"><b class="block font-display text-2xl text-accent">74 MB</b><span class="text-xs text-muted">installer</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- final call to action -->
+<section class="bg-gradient-to-b from-accent2 to-accent text-white">
+  <div class="mx-auto max-w-3xl px-5 py-16 text-center">
+    <img src="src/assets/generated/icon.png" alt="" class="bob mx-auto h-20 w-20">
+    <h2 class="mt-4 font-display text-3xl font-semibold sm:text-4xl">Stay hydrated. 💙</h2>
+    <p class="mt-3 text-lg text-white/90">Let a buddy remind you. Free for Windows 10 and 11.</p>
+    <a href="releases/Hydration%20Buddy%20Setup%201.3.0.exe" download
+       class="mt-7 inline-flex items-center gap-3 rounded-2xl bg-white px-8 py-4 text-lg font-extrabold text-accent shadow-[0_4px_0_#156ab0] transition hover:bg-sky active:translate-y-1 active:shadow-none">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 20h16"/></svg>
+      Download Hydration Buddy
+    </a>
+  </div>
+</section>
+
+</main>
+
+<footer class="bg-ink text-[#b9cddd]">
+  <div class="mx-auto flex max-w-6xl flex-col items-center gap-3 px-5 py-8 text-center text-sm sm:flex-row sm:justify-between sm:text-left">
+    <p><b class="text-white">Hydration Buddy</b> · MIT License</p>
+    <p>The bundled fonts, Fredoka and Nunito, are under the SIL Open Font License.</p>
+    <a href="https://github.com/Sabariks092/hyderation-buddy" class="font-bold text-white hover:underline">GitHub</a>
+  </div>
+</footer>
+
+</body>
+</html>
