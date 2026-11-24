@@ -1,6 +1,6 @@
 // Character definitions. Each one is modelled closely on one of the reference stickers in /assets
 // (face, hair style, accessories, outfit colours) and re-drawn as a full-body walking character.
-const SKIN = { base: '#f5c8a6', light: '#fbdcc4', shade: '#e4a888', deep: '#cf8f72', blush: '#f2878f' };
+const SKIN = { base: '#f7cdb1', light: '#fde4d2', shade: '#e9ae95', deep: '#d0917a', blush: '#f2848e' };
 const HAIR = { base: '#1f1b23', top: '#3a3441', mid: '#433c4d', gloss: '#7d7689', dark: '#0f0d12' };
 
 module.exports = [
@@ -8,7 +8,7 @@ module.exports = [
     id: 'lavender',
     name: 'Lavender',
     tagline: 'Wavy hair, lilac smocked top',
-    skin: SKIN, hair: HAIR, hairStyle: 'longWavy', eyeColor: '#3e3540',
+    skin: SKIN, hair: HAIR, hairStyle: 'longWavy', eyeColor: '#4b3a3a',
     noseStud: true,
     top: { kind: 'offShoulder', color: '#9874bd', shade: '#7458a0', line: '#5f4585', sleeve: 'puff' },
     necklace: { kind: 'heart', color: '#e3e6ec' },
@@ -19,7 +19,7 @@ module.exports = [
     id: 'ruby',
     name: 'Ruby',
     tagline: 'Curly hair, round glasses, floral dress',
-    skin: SKIN, hair: HAIR, hairStyle: 'curlyLong', eyeColor: '#3a2f33',
+    skin: SKIN, hair: HAIR, hairStyle: 'curlyLong', eyeColor: '#4b3a3a',
     glasses: { color: '#3a2a2e', width: 1.6, size: 13.6 },
     earring: { kind: 'pearl' },
     top: { kind: 'dress', color: '#b83f4b', shade: '#8f2d39', line: '#6f1f2b', sleeve: 'shortPuff', print: 'roses', printColors: ['#6d1824', '#de6f7a', '#4b6b3a'] },
@@ -31,7 +31,7 @@ module.exports = [
     id: 'scarlet',
     name: 'Scarlet',
     tagline: 'Twin braids, red kurta & ID lanyard',
-    skin: SKIN, hair: HAIR, hairStyle: 'braids', eyeColor: '#43352f',
+    skin: SKIN, hair: HAIR, hairStyle: 'braids', eyeColor: '#4b3a3a',
     top: { kind: 'kurta', color: '#dc4d51', shade: '#b03539', line: '#8f2a31', sleeve: 'long' },
     dupatta: { color: '#262329', shade: '#3c3842', style: 'drape' },
     lanyard: { color: '#3569ae', stripe: '#a7cbf2', card: '#ffffff' },
@@ -42,7 +42,7 @@ module.exports = [
     id: 'pearl',
     name: 'Pearl',
     tagline: 'Curly bun, gold specs & printed kurta',
-    skin: SKIN, hair: HAIR, hairStyle: 'curlyBun', eyeColor: '#3f3330',
+    skin: SKIN, hair: HAIR, hairStyle: 'curlyBun', eyeColor: '#4b3a3a',
     glasses: { color: '#c99a3e', width: 2.4, size: 15.2, gold: true },
     top: { kind: 'kurta', color: '#8e939a', shade: '#6d727a', line: '#5a5f66', sleeve: 'threeQuarter', print: 'floralBright', printColors: ['#cf474d', '#e7b947', '#4f7cc4', '#6c9b59'] },
     dupatta: { color: '#a9aeb5', shade: '#8a9099', style: 'hang', print: true },
@@ -54,7 +54,7 @@ module.exports = [
     id: 'mint',
     name: 'Mint',
     tagline: 'Sleek side braid, hoops & mint shirt',
-    skin: SKIN, hair: HAIR, hairStyle: 'slickBraid', eyeColor: '#3c3438',
+    skin: SKIN, hair: HAIR, hairStyle: 'slickBraid', eyeColor: '#4b3a3a',
     earring: { kind: 'hoop' },
     top: { kind: 'shirt', color: '#d2e8d3', shade: '#a9cbac', line: '#84a888', sleeve: 'elbow' },
     necklace: { kind: 'chain', color: '#d5d9df' },

@@ -12,6 +12,7 @@ const ASSETS = path.join(__dirname, 'assets', 'generated');
 
 let store, tray, settingsWin = null, overlayWin = null;
 let timer = null, nextAt = null, pausedUntil = null, activeReminder = false, locked = false;
+let bubbleWin = null, bubbleSize = null, bubbleAnchor = null, bubbleAnswered = false;
 
 if (!app.requestSingleInstanceLock()) { app.quit(); process.exit(0); }
 app.on('second-instance', () => openSettings());
@@ -107,9 +108,10 @@ function ensureOverlay() {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, backgroundThrottling: false },
   });
   overlayWin.setAlwaysOnTop(true, 'screen-saver');
-  overlayWin.setIgnoreMouseEvents(true, { forward: true });
+  overlayWin.setIgnoreMouseEvents(true); // the avatar never takes clicks; the bubble has its own window
   overlayWin.loadFile(path.join(__dirname, 'overlay', 'overlay.html'));
-  overlayWin.on('closed', () => { overlayWin = null; activeReminder = false; });
+  overlayWin.on('closed', () => { overlayWin = null; activeReminder = false; destroyBubble(); });
+  overlayWin.webContents.on('render-process-gone', () => { if (overlayWin && !overlayWin.isDestroyed()) overlayWin.destroy(); });
   return overlayWin;
 }
 function showReminder(isPreview) {
@@ -127,25 +129,78 @@ function showReminder(isPreview) {
     sound: !!s.sound,
     preview: !!isPreview,
     today: store.todayCount(),
+    name: String(s.userName || '').trim().slice(0, 40),
   };
+  job.message = personalize(job.message, job.name);
   store.saveState();
   const win = ensureOverlay();
   win.setBounds(overlayBounds(scale));
+  createBubble(job);
   const send = () => { win.showInactive(); win.webContents.send('overlay:play', job); };
   if (win.webContents.isLoading()) win.webContents.once('did-finish-load', send); else send();
 }
+function personalize(msg, name) {
+  return String(msg).replace(/{name}/gi, name || 'friend');
+}
 function hideOverlay() {
   activeReminder = false;
-  if (overlayWin && !overlayWin.isDestroyed()) {
-    overlayWin.setIgnoreMouseEvents(true, { forward: true });
-    overlayWin.hide();
-  }
+  destroyBubble();
+  if (overlayWin && !overlayWin.isDestroyed()) overlayWin.hide();
 }
 
-ipcMain.on('overlay:interactive', (_e, on) => {
-  if (overlayWin && !overlayWin.isDestroyed()) overlayWin.setIgnoreMouseEvents(!on, { forward: true });
-});
-ipcMain.on('overlay:respond', (_e, action) => {
+// ------------------------------------------------------------------ speech bubble
+// The bubble is a separate window, made fresh for each reminder. A window that switches between
+// click-through and clickable stops receiving clicks after its first hide/show on Windows, so the
+// avatar window is always click-through and this one is always clickable.
+function createBubble(job) {
+  destroyBubble();
+  const win = new BrowserWindow({
+    width: 400, height: 320, show: false, frame: false, transparent: true, resizable: false, movable: false,
+    minimizable: false, maximizable: false, skipTaskbar: true, focusable: false, alwaysOnTop: true, hasShadow: false,
+    backgroundColor: '#00000000', title: 'Hydration Buddy Message',
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, backgroundThrottling: false },
+  });
+  bubbleWin = win;
+  win.setAlwaysOnTop(true, 'screen-saver', 1);
+  win.webContents.once('did-finish-load', () => { if (!win.isDestroyed()) win.webContents.send('bubble:job', job); });
+  win.on('closed', () => { if (bubbleWin === win) bubbleWin = null; });
+  win.loadFile(path.join(__dirname, 'bubble', 'bubble.html'));
+}
+function destroyBubble() {
+  const win = bubbleWin;
+  bubbleWin = null; bubbleSize = null; bubbleAnchor = null; bubbleAnswered = false;
+  if (win && !win.isDestroyed()) win.destroy();
+}
+function tryShowBubble() {
+  if (!bubbleWin || bubbleWin.isDestroyed() || !bubbleSize || !bubbleAnchor || bubbleWin.isVisible()) return;
+  if (!overlayWin || overlayWin.isDestroyed()) return;
+  const o = overlayWin.getBounds(), wa = screen.getDisplayMatching(o).workArea;
+  const x = Math.round(o.x + bubbleAnchor.x - bubbleSize.tipX), y = Math.round(o.y + bubbleAnchor.y - bubbleSize.tipY);
+  bubbleWin.setBounds({
+    x: Math.max(wa.x, x), y: Math.max(wa.y, Math.min(y, wa.y + wa.height - bubbleSize.h)),
+    width: Math.ceil(bubbleSize.w), height: Math.ceil(bubbleSize.h),
+  });
+  bubbleWin.showInactive();
+  bubbleWin.webContents.send('bubble:show');
+}
+// fade out, then remove the window so it cannot block anything
+function closeBubble() {
+  const win = bubbleWin;
+  bubbleAnchor = null;
+  if (!win || win.isDestroyed()) return;
+  win.setIgnoreMouseEvents(true);
+  win.webContents.send('bubble:hide');
+  setTimeout(() => { if (bubbleWin === win) destroyBubble(); }, 320);
+}
+const fromBubble = (e) => bubbleWin && !bubbleWin.isDestroyed() && e.sender === bubbleWin.webContents;
+ipcMain.on('bubble:ready', (e, size) => { if (fromBubble(e)) { bubbleSize = size; tryShowBubble(); } });
+ipcMain.on('bubble:hover', (e, on) => { if (fromBubble(e) && overlayWin && !overlayWin.isDestroyed()) overlayWin.webContents.send('overlay:hover', !!on); });
+ipcMain.on('overlay:showBubble', (_e, anchor) => { bubbleAnchor = anchor; tryShowBubble(); });
+ipcMain.on('overlay:hideBubble', closeBubble);
+ipcMain.on('overlay:respond', (e, action) => {
+  if (!fromBubble(e) || bubbleAnswered) return;
+  bubbleAnswered = true;
+  if (overlayWin && !overlayWin.isDestroyed()) overlayWin.webContents.send('overlay:leave', action);
   if (action === 'drank') { store.addDrink(); schedule(); }
   else if (action === 'snooze') schedule(Math.max(1, Number(store.get().snoozeMinutes) || 10) * 60 * 1000);
   sendStatus();
@@ -165,8 +220,10 @@ function openSettings() {
   settingsWin.on('closed', () => { settingsWin = null; });
 }
 function status() {
-  return { nextAt, pausedUntil, today: store.todayCount(), enabled: store.get().enabled, isPackaged: app.isPackaged };
+  return { nextAt, pausedUntil, today: store.todayCount(), history: store.history(7), enabled: store.get().enabled, isPackaged: app.isPackaged };
 }
+ipcMain.handle('status:get', () => status());
+ipcMain.handle('stats:resetToday', () => { store.resetToday(); sendStatus(); return status(); });
 function sendStatus() {
   if (settingsWin && !settingsWin.isDestroyed()) settingsWin.webContents.send('status', status());
   updateTray();
@@ -176,7 +233,7 @@ ipcMain.handle('settings:defaults', () => DEFAULTS);
 ipcMain.handle('settings:save', (_e, patch) => {
   const before = store.get();
   const after = store.set(patch || {});
-  if (before.autoStart !== after.autoStart) applyAutoStart();
+  if (before.autoStart !== after.autoStart || before.autoLaunch !== after.autoLaunch) applyAutoStart();
   if (before.intervalMinutes !== after.intervalMinutes || before.enabled !== after.enabled) schedule();
   sendStatus();
   return after;
@@ -229,11 +286,11 @@ app.whenReady().then(() => {
   powerMonitor.on('lock-screen', () => { locked = true; });
   powerMonitor.on('unlock-screen', () => { locked = false; });
   powerMonitor.on('resume', () => schedule());
-  const hidden = process.argv.includes('--hidden');
-  if (first) {
-    openSettings();
-    setTimeout(() => showReminder(true), 2500); // say hello right after installation
-  } else if (!hidden) openSettings();
+  // Auto launch: start silently in the tray and begin reminding. The first launch after
+  // installing greets the user once so they can see it is running.
+  const fromLogin = process.argv.includes('--hidden');
+  if (first) setTimeout(() => showReminder(true), 6000);
+  else if (!fromLogin && !store.get().autoLaunch) openSettings();
   setInterval(updateTray, 60 * 1000);
 });
 app.on('window-all-closed', (e) => { /* keep running in the tray */ });

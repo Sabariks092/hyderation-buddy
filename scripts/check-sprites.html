@@ -1,0 +1,31 @@
+<!doctype html><meta charset="utf-8"><script src="../src/sprites.js"></script>
+<script>
+// compares every unpacked AVIF sheet with its PNG source
+window.check = async (avatar) => {
+  const BASE = '../src/assets/generated/';
+  const m = await (await fetch(BASE + 'manifest.json')).json();
+  const px = (src, w, h) => { const c = new OffscreenCanvas(w, h), x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(src, 0, 0); return x.getImageData(0, 0, w, h).data; };
+  const rows = [];
+  for (const [name, sq] of Object.entries(m.sequences)) {
+    const t0 = performance.now();
+    const sheet = await loadSpriteSheet(`${BASE}${avatar}/${name}.avif`, sq.frames, m);
+    const ms = Math.round(performance.now() - t0);
+    const png = await createImageBitmap(await (await fetch(`${BASE}${avatar}/${name}.png`)).blob());
+    if (png.width !== sheet.width || png.height !== sheet.height) throw new Error(`${name}: size differs`);
+    const a = px(sheet, sheet.width, sheet.height), b = px(png, png.width, png.height);
+    // error as seen on screen: both drawn over white and over a dark desktop
+    let se = 0, n = 0, maxA = 0, worst = 0;
+    for (let i = 0; i < a.length; i += 4) {
+      const aa = a[i + 3] / 255, ba = b[i + 3] / 255;
+      if (!a[i + 3] && !b[i + 3]) continue;
+      maxA = Math.max(maxA, Math.abs(a[i + 3] - b[i + 3]));
+      for (const bg of [255, 30]) for (let c = 0; c < 3; c++) {
+        const d = (a[i + c] * aa + bg * (1 - aa)) - (b[i + c] * ba + bg * (1 - ba));
+        se += d * d; n++; worst = Math.max(worst, Math.abs(d));
+      }
+    }
+    rows.push(`${name}: ${sq.frames} frames, ${ms} ms, PSNR ${(10 * Math.log10(255 * 255 / (se / n))).toFixed(1)} dB, worst pixel ${worst.toFixed(0)}, worst alpha ${maxA}`);
+  }
+  return rows;
+};
+</script>

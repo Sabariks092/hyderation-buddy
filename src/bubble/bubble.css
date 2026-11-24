@@ -1,0 +1,59 @@
+@font-face { font-family: "Fredoka"; src: url("../assets/fonts/fredoka.woff2") format("woff2"); font-weight: 300 700; }
+@font-face { font-family: "Nunito"; src: url("../assets/fonts/nunito.woff2") format("woff2"); font-weight: 200 1000; }
+:root { --accent: #1f8ee0; --tint: #e4f3ff; --ink: #24384c; }
+html, body { margin: 0; height: 100%; background: transparent; overflow: hidden; user-select: none; cursor: default; }
+body { font-family: "Nunito", "Segoe UI", sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+.bubble { position: absolute; left: 22px; top: 18px; width: 336px; transform-origin: 100% 78%;
+  filter: drop-shadow(0 2px 3px rgba(26, 60, 96, .14)) drop-shadow(0 8px 12px rgba(26, 60, 96, .20));
+  transition: opacity .22s ease, transform .42s cubic-bezier(.2, 1.45, .4, 1); }
+.bubble.hidden { opacity: 0; transform: scale(.7) translate(16px, 10px); pointer-events: none; }
+.tail { position: absolute; right: -27px; bottom: 34px; }
+.tail path { fill: var(--wave-solid, #d9effe); }
+
+.card { position: relative; overflow: hidden; box-sizing: border-box; padding: 18px 20px 15px; border-radius: 26px;
+  background: radial-gradient(120% 90% at 0% 0%, var(--tint) 0%, rgba(255, 255, 255, 0) 60%), linear-gradient(180deg, #ffffff 0%, #fbfdff 58%, #eef8ff 100%);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .95), inset 0 0 0 2.5px rgba(70, 150, 215, .13); }
+.card > * { position: relative; }
+.waves { position: absolute; left: 0; bottom: 0; width: 200%; height: 62px; }
+.w1 { fill: #cfeafd; opacity: .75; animation: drift 9s linear infinite; }
+.w2 { fill: #d9effe; opacity: .95; animation: drift 13s linear infinite reverse; }
+@keyframes drift { from { transform: translateX(0) } to { transform: translateX(-360px) } }
+.drop { position: absolute !important; border-radius: 50%; border: 1.5px solid rgba(80, 170, 235, .38); background: rgba(255, 255, 255, .55); animation: rise 5.5s ease-in infinite; }
+.d1 { width: 9px; height: 9px; right: 46px; bottom: 10px; }
+.d2 { width: 6px; height: 6px; right: 76px; bottom: 4px; animation-delay: 1.9s; }
+.d3 { width: 7px; height: 7px; right: 24px; bottom: 2px; animation-delay: 3.4s; }
+@keyframes rise { 0% { transform: translateY(8px); opacity: 0 } 25% { opacity: 1 } 100% { transform: translateY(-86px); opacity: 0 } }
+
+.head { display: flex; align-items: center; gap: 12px; padding-right: 26px; }
+.badge { flex: none; width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(160deg, #fff, var(--tint)); box-shadow: 0 0 0 2.5px #fff, 0 0 0 4.5px var(--accent), 0 4px 10px rgba(30, 80, 130, .2); overflow: hidden; }
+.badge img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; display: block; }
+.kicker { font: 600 11px/1 "Fredoka", sans-serif; letter-spacing: 1.3px; text-transform: uppercase; color: #64809a; }
+.hi { margin-top: 5px; font: 600 23px/1.12 "Fredoka", sans-serif; color: var(--accent); overflow-wrap: anywhere; }
+.hand { display: inline-block; font-size: 20px; transform-origin: 70% 80%; animation: hand 1.6s ease-in-out infinite; }
+@keyframes hand { 0%, 55%, 100% { transform: rotate(0) } 12%, 36% { transform: rotate(16deg) } 24% { transform: rotate(-10deg) } }
+.msg { margin: 13px 0 15px; font-size: 16px; line-height: 1.42; font-weight: 700; color: #34495e; overflow-wrap: anywhere; }
+
+.actions { display: flex; gap: 10px; }
+button { font-family: "Fredoka", "Segoe UI", sans-serif; cursor: pointer; border: 0; outline: 0; }
+.primary, .ghost { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 42px; border-radius: 21px; font-size: 15.5px; font-weight: 600; white-space: nowrap; transition: transform .14s ease, box-shadow .14s ease, background .14s ease; }
+.primary { flex: 1.25; color: #fff; background: linear-gradient(180deg, #3aa9f2 0%, #1479cf 100%); box-shadow: 0 5px 13px rgba(20, 121, 207, .38), inset 0 1.5px 0 rgba(255, 255, 255, .45); }
+.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(20, 121, 207, .46), inset 0 1.5px 0 rgba(255, 255, 255, .45); }
+.primary:active { transform: translateY(1px) scale(.98); box-shadow: 0 2px 6px rgba(20, 121, 207, .4); }
+.ghost { flex: 1; color: #2f5d85; background: rgba(255, 255, 255, .92); box-shadow: inset 0 0 0 1.8px #c3dcf0; }
+.ghost:hover { background: #fff; box-shadow: inset 0 0 0 1.8px #7fbdea, 0 4px 10px rgba(40, 100, 150, .14); transform: translateY(-2px); }
+.ghost:active { transform: translateY(1px) scale(.98); }
+.x { position: absolute !important; z-index: 2; top: 13px; right: 13px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #6c849a; background: rgba(255, 255, 255, .75); transition: background .15s, color .15s, transform .2s; }
+.x:hover { background: #ffe3e6; color: #c93a52; transform: rotate(90deg); }
+
+.foot { display: flex; align-items: center; gap: 9px; min-height: 20px; margin-top: 14px; }
+.drops { display: inline-flex; gap: 3px; flex: none; }
+.drops svg { width: 10px; height: 13px; }
+.drops path { fill: #fff; stroke: #58b1ea; stroke-width: 2; }
+.drops .on path { fill: #2f9ae6; stroke: #2f9ae6; }
+.drops .pop { animation: pop .5s cubic-bezier(.2, 1.8, .4, 1); }
+@keyframes pop { 0% { transform: scale(0) } 100% { transform: scale(1) } }
+.count { font-size: 13px; font-weight: 800; color: #3c6384; line-height: 1.2; }
+.done .primary { background: linear-gradient(180deg, #46c990, #149064); box-shadow: 0 5px 13px rgba(20, 144, 100, .36); }
+.done .primary, .done .ghost, .done .x { pointer-events: none; }
+.done .ghost, .done .x { opacity: .45; }

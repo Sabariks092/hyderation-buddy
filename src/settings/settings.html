@@ -18,6 +18,38 @@
 </header>
 
 <main>
+  <section class="card dash">
+    <h2>Your hydration</h2>
+    <div class="dash-top">
+      <div class="dash-today">
+        <b id="dashToday">0</b>
+        <span id="dashTodayLabel">glasses today</span>
+        <button id="resetToday" class="ghost" title="Set today's count back to 0">↺ Reset</button>
+      </div>
+      <div class="dash-chart">
+        <div class="dash-head"><span>Glasses per day · last 7 days</span><span id="dashSummary"></span></div>
+        <div class="bars" id="bars" role="img" aria-label="Glasses of water per day for the last 7 days"></div>
+      </div>
+    </div>
+    <label class="row switch dash-toggle"><span>Enable reminders<br><small class="hint" id="dashStatus"></small></span><input type="checkbox" id="enabledTop"><i></i></label>
+  </section>
+
+  <section class="card">
+    <h2>About you</h2>
+    <div class="row">
+      <span>Your name<br><small class="hint">Shown in every reminder – “Hi <b id="namePreview">there</b>! 👋”</small></span>
+      <div class="namebox"><input type="text" id="userName" maxlength="40" placeholder="Type your name"><button id="saveName" class="primary small">Save</button></div>
+    </div>
+    <p class="hint">Tip: write <code>{name}</code> inside your own messages to use your name there too.</p>
+  </section>
+
+  <section class="card">
+    <h2>Startup</h2>
+    <label class="row switch"><span>Auto startup<br><small class="hint">Start Hydration Buddy automatically when Windows starts</small></span><input type="checkbox" id="autoStart"><i></i></label>
+    <label class="row switch"><span>Auto launch in background<br><small class="hint">Launch silently in the system tray (no window) and start reminding right away</small></span><input type="checkbox" id="autoLaunch"><i></i></label>
+    <p class="hint" id="devHint" hidden>Auto startup is registered only in the installed app (not in development mode).</p>
+  </section>
+
   <section class="card">
     <h2>Reminders</h2>
     <label class="row switch"><span>Enable reminders</span><input type="checkbox" id="enabled"><i></i></label>
@@ -35,8 +67,6 @@
     <div class="row sub" id="quietRow">
       <span>From</span><input type="time" id="quietStart"><span>to</span><input type="time" id="quietEnd">
     </div>
-    <label class="row switch"><span>Launch automatically when Windows starts</span><input type="checkbox" id="autoStart"><i></i></label>
-    <p class="hint" id="devHint" hidden>Auto-start is registered only in the installed app (not in development mode).</p>
   </section>
 
   <section class="card">
@@ -105,6 +135,7 @@
   </section>
 </main>
 <div id="toast" class="toast">Saved ✓</div>
+<script src="../sprites.js"></script>
 <script src="settings.js"></script>
 </body>
 </html>

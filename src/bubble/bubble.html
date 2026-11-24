@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'">
+<title>Hydration Buddy Message</title>
+<link rel="stylesheet" href="bubble.css">
+</head>
+<body>
+  <div id="bubble" class="bubble hidden" role="dialog" aria-live="polite" aria-labelledby="hiName">
+    <svg class="tail" width="30" height="40" viewBox="0 0 30 40" aria-hidden="true"><path d="M0 2 C10 12 18 18 29 20 C18 24 8 30 0 38Z"/></svg>
+    <div class="card">
+      <svg class="waves" viewBox="0 0 720 90" preserveAspectRatio="none" aria-hidden="true">
+        <path class="w1" d="M0 40 C60 10 120 10 180 40 S300 70 360 40 S480 10 540 40 S660 70 720 40 V90 H0Z"/>
+        <path class="w2" d="M0 52 C60 78 120 78 180 52 S300 26 360 52 S480 78 540 52 S660 26 720 52 V90 H0Z"/>
+      </svg>
+      <i class="drop d1"></i><i class="drop d2"></i><i class="drop d3"></i>
+      <button id="close" class="x" title="Dismiss" aria-label="Dismiss"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 2 L10 10 M10 2 L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <div class="head">
+        <div class="badge"><img id="face" alt=""></div>
+        <div class="title">
+          <div class="kicker">Hydration time</div>
+          <div class="hi"><span id="hiName">Hi there!</span> <span class="hand">👋</span></div>
+        </div>
+      </div>
+      <div id="msg" class="msg"></div>
+      <div class="actions">
+        <button id="drank" class="primary"><svg width="15" height="18" viewBox="0 0 16 20" aria-hidden="true"><path d="M8 1 C8 1 1.5 9 1.5 13 A6.5 6.5 0 0 0 14.5 13 C14.5 9 8 1 8 1Z" fill="currentColor"/></svg><span>I drank it</span></button>
+        <button id="snooze" class="ghost"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 4.4 V8 L10.6 9.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="snoozeText">Snooze</span></button>
+      </div>
+      <div class="foot"><span id="drops" class="drops" aria-hidden="true"></span><span id="count" class="count"></span></div>
+    </div>
+  </div>
+  <script src="bubble.js"></script>
+</body>
+</html>

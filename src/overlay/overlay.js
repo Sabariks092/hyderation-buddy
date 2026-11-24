@@ -2,9 +2,6 @@
 (() => {
   const canvas = document.getElementById('stage');
   const ctx = canvas.getContext('2d');
-  const bubble = document.getElementById('bubble');
-  const msgEl = document.getElementById('msg');
-  const countEl = document.getElementById('count');
   const BASE = '../assets/generated/';
   let manifest = null;
   const sheetCache = new Map();
@@ -19,14 +16,14 @@
   addEventListener('resize', resize);
   resize();
 
-  const loadImg = (src) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
   async function loadSheets(avatar) {
     if (sheetCache.has(avatar)) return sheetCache.get(avatar);
     const out = {};
     await Promise.all(Object.entries(manifest.sequences).map(async ([name, sq]) => {
-      out[name] = await loadImg(`${BASE}${avatar}/${sq.file}`);
-      if (out[name].decode) await out[name].decode().catch(() => {});
+      // unpacked once into a decoded sprite sheet (see ../sprites.js)
+      out[name] = await window.loadSpriteSheet(`${BASE}${avatar}/${sq.file}`, sq.frames, manifest);
     }));
+    for (const old of sheetCache.values()) Object.values(old).forEach((b) => b.close && b.close());
     sheetCache.clear(); // keep memory low: only one avatar cached
     sheetCache.set(avatar, out);
     return out;
@@ -111,7 +108,6 @@
     ctx.fill();
     ctx.restore();
     ctx.drawImage(img, sx, sy, m.frameW, m.frameH, dx, dy, dw, dh);
-    if (!bubble.classList.contains('hidden')) placeBubble();
   }
   function loop(t) {
     raf = requestAnimationFrame(loop);
@@ -123,37 +119,36 @@
     draw();
   }
 
-  function placeBubble() {
-    const s = job.scale;
-    const headTop = innerHeight - 4 - (290 - 45) * manifest.scale * s;
-    const right = Math.max(bubble.offsetWidth + 8, hipX - 46 * s);
-    bubble.style.left = `${right - bubble.offsetWidth}px`;
-    bubble.style.top = `${Math.max(6, headTop - bubble.offsetHeight * 0.7)}px`;
-  }
+  // ---------------------------------------------------------------- bubble (separate window)
+  let bubbleOpen = false;
   function showBubble() {
-    msgEl.textContent = job.message;
-    countEl.textContent = job.today > 0 ? `You've had ${job.today} glass${job.today === 1 ? '' : 'es'} today — keep going!` : 'First glass of the day? Let\'s go!';
-    document.getElementById('snooze').textContent = `Snooze ${job.snoozeMinutes || 10}m`;
-    bubble.classList.remove('hidden');
-    placeBubble();
+    if (leaving) return;
+    const s = job.scale;
+    bubbleOpen = true;
+    // tip of the bubble's tail: just left of her cheek
+    const reach = ['lavender', 'ruby'].includes(job.avatar) ? 86 : 70; // half width of her hair
+    window.hydra.showBubble({ x: hipX - reach * s, y: innerHeight - 4 - 196 * s });
   }
-  function hideBubble() { bubble.classList.add('hidden'); window.hydra.setInteractive(false); }
+  function hideBubble() { if (bubbleOpen) { bubbleOpen = false; window.hydra.hideBubble(); } }
   function armDismiss() {
     clearTimeout(dismissTimer);
-    if (job.autoDismissSeconds > 0) dismissTimer = setTimeout(() => leave(null), job.autoDismissSeconds * 1000);
+    if (!leaving && !hovering && job.autoDismissSeconds > 0) dismissTimer = setTimeout(() => leave(null), job.autoDismissSeconds * 1000);
   }
+  // do not walk away while the user is pointing at the message
+  let hovering = false;
+  window.hydra.onHover((on) => {
+    hovering = on;
+    if (!job) return;
+    if (on) clearTimeout(dismissTimer); else if (phase === 'idle') armDismiss();
+  });
+  let leaveTimer = 0;
   function leave(action) {
     if (leaving || !job) return;
     leaving = true;
     clearTimeout(dismissTimer);
-    if (action) window.hydra.respond(action);
-    if (action === 'drank') { countEl.textContent = 'Yay! Great job 🎉'; setTimeout(go, 700); } else go();
-    function go() {
-      hideBubble();
-      // finish the current pose first, then turn and walk away to the right
-      phase = 'turnAway'; setSeq('turnRight');
-    }
+    leaveTimer = setTimeout(() => { hideBubble(); phase = 'turnAway'; setSeq('turnRight'); }, action === 'drank' ? 1100 : 0);
   }
+  window.hydra.onLeave(leave);
   function finish() {
     cancelAnimationFrame(raf);
     job = null; seqName = null; leaving = false;
@@ -161,17 +156,12 @@
     window.hydra.finished();
   }
 
-  bubble.addEventListener('mouseenter', () => window.hydra.setInteractive(true));
-  bubble.addEventListener('mouseleave', () => window.hydra.setInteractive(false));
-  document.getElementById('drank').addEventListener('click', () => leave('drank'));
-  document.getElementById('snooze').addEventListener('click', () => leave('snooze'));
-  document.getElementById('close').addEventListener('click', () => leave('dismiss'));
-
   window.hydra.onPlay(async (j) => {
     if (!manifest) manifest = await (await fetch(BASE + 'manifest.json')).json();
     cancelAnimationFrame(raf);
     clearTimeout(dismissTimer);
-    hideBubble();
+    clearTimeout(leaveTimer);
+    bubbleOpen = false; hovering = false;
     leaving = false;
     job = j;
     resize();
